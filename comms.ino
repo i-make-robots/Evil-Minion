@@ -294,15 +294,11 @@ void process_command() {
   cmd=parse_number('R',-1);
   switch(cmd) {
   case 0:  process_move_motors();  break;
-  case 1:  continuous_reporting=1;  break;
-  case 2:  continuous_reporting=0;  break;
+  case 1:  continuous_reporting=1-continuous_reporting;  break;
   case 3:  
-    compliant_mode=1;
-    Serial.println(F("Compliance ON"));
-    break;
-  case 4:
-    compliant_mode=0;
-    Serial.println(F("Compliance OFF"));
+    compliant_mode=1-compliant_mode;
+    Serial.print(F("Compliance "));
+    Serial.println(compliant_mode==1?F("ON"):F("OFF"));
     break;
   case 5:  compliance_limit = parse_number('P',compliance_limit);  break;
   case 60: process_sensors_adjust();  break;

@@ -9,13 +9,13 @@
 #define PIN_LED   (13)
 
 // MOTORS & ACTUATORS
-#define PIN_B_DIR (29)
-#define PIN_B_STE (31)
-#define PIN_B_ENA (33)
-
 #define PIN_A_DIR (46)
 #define PIN_A_STE (48)
 #define PIN_A_ENA (50)
+
+#define PIN_B_DIR (29)
+#define PIN_B_STE (31)
+#define PIN_B_ENA (33)
 
 #define PIN_C_INA (4)
 #define PIN_C_PWM (3)
