@@ -119,7 +119,10 @@ void test_one_sensor(int sensor_number,int csel_pin,int sdout_pin) {
     //Serial.print("ERR");
     //Serial.print(err,HEX);
   } else {
-    sensors_raw[sensor_number] = sensor_angle(d) + sensors_adjust[sensor_number];
+    float angle = sensor_angle(d) + sensors_adjust[sensor_number];
+    if(angle<0) angle+=360;
+    else if(angle>=360) angle-=360;
+    sensors_raw[sensor_number] = angle;
 //    Serial.print(sensors_raw[sensor_number]);
   }
 }

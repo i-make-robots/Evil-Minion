@@ -134,8 +134,12 @@ void process_move_motors() {
     Serial.print("Moving ");
     Serial.println(i);
     
-    v = parse_number(motor_letters[i], 0 );
-    if( absolute_mode==0 ) v += destination[i];
+    if( absolute_mode==0 ) {
+      v = parse_number(motor_letters[i], 0 );
+      v += destination[i];
+    } else {
+      v = parse_number(motor_letters[i], destination[i] );
+    }
     destination[i] = software_angle_limits(i,v);
     
     PID_init(pid[i]);
