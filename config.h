@@ -104,15 +104,44 @@
 #define DEFAULT_IS_ABSOLUTE_ON (1)  // set 1 for on, 0 for off
 
 
+
+//------------------------------------------------------------------------------
+// PHYSICAL LIMITS
+//------------------------------------------------------------------------------
+
+#define ANGLE_A_MAX ()
+#define ANGLE_A_MIN ()
+#define ANGLE_B_MAX ()
+#define ANGLE_B_MIN ()
+#define ANGLE_C_MAX (50.57)
+#define ANGLE_C_MIN (19.69)
+#define ANGLE_D_MAX (87.85)
+#define ANGLE_D_MIN (2.1)
+#define ANGLE_E_MAX (-165)
+#define ANGLE_E_MIN (+165)
+
+
+
 //------------------------------------------------------------------------------
 // EEPROM MEMORY MAP
 //------------------------------------------------------------------------------
 #define EEPROM_VERSION   1                         // Increment EEPROM_VERSION when adding new variables
+
 #define ADDR_VERSION     0                         // address of the version number (one byte)
 #define ADDR_GUID        (ADDR_VERSION+1)          // address of the UUID (long - 4 bytes)
+// sensor adjustments
+#define ADDR_ADJ_A (ADDR_GUID+4)
+#define ADDR_ADJ_B (ADDR_ADJ_A+4)
+#define ADDR_ADJ_C (ADDR_ADJ_B+4)
+#define ADDR_ADJ_D (ADDR_ADJ_C+4)
+#define ADDR_ADJ_E (ADDR_ADJ_D+4)
 
 
 
+
+//------------------------------------------------------------------------------
+// GLOBALS
+//------------------------------------------------------------------------------
 extern long robot_uid;
 extern float destination[NUM_AXIES]; 
 extern char move_active[NUM_AXIES];

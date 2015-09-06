@@ -1,8 +1,13 @@
 #include "sensor.h"
 
-
+float sensors_adjust[NUM_AXIES];
 float sensors_raw[NUM_AXIES];
 float sensors_expected[NUM_AXIES];
+
+
+//
+void setup_sensors() {
+}
 
 
 // from http://www.madscientisthut.com/forum_php/viewtopic.php?f=11&t=7
@@ -37,7 +42,7 @@ uint32_t sensor_update(int csel,int sdout) {
 float sensor_angle(uint32_t data) {
   uint32_t angle = data >> SENSOR_STATUS_BITS; // shift 18-digit angle right 6 digits to form 12-digit value
   angle &= SENSOR_ANGLE_MASK >> SENSOR_STATUS_BITS;  // mask the 18 bits that form the angle
-  return angle * SENSOR_ANGLE_PER_BIT;
+  return (angle * SENSOR_ANGLE_PER_BIT);
 }
 
 
@@ -114,7 +119,7 @@ void test_one_sensor(int sensor_number,int csel_pin,int sdout_pin) {
     //Serial.print("ERR");
     //Serial.print(err,HEX);
   } else {
-    sensors_raw[sensor_number] = sensor_angle(d);
+    sensors_raw[sensor_number] = sensor_angle(d) + sensors_adjust[sensor_number];
 //    Serial.print(sensors_raw[sensor_number]);
   }
 }

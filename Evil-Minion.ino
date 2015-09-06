@@ -65,10 +65,8 @@ void setup() {
 
   
   comms_setup();
-  
-  
-  //test_motors();
-  
+  loadConfig();
+  setup_sensors();
   tick_sensors();
   
   int i;
@@ -76,9 +74,8 @@ void setup() {
     // PIDs
     PID_init(pid[i]);
     move_active[i]=0;
-    
     sensors_expected[i] = sensors_raw[i];
-  }
+  } 
   
   compliant_mode = 0;
   continuous_reporting = 0;

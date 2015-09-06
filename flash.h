@@ -3,8 +3,9 @@
 
 
 
-void LoadConfig();
-void SaveUID();
+void loadConfig();
+void configSaveAdjustments();
+void saveUID();
 
 
 

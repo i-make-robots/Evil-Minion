@@ -1,4 +1,4 @@
-##### Minion #####
+##### Evil-Minion #####
 
 http://www.marginallyclever.com/
 

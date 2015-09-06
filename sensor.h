@@ -4,7 +4,7 @@
 
 #include "config.h"
 
-
+extern float sensors_adjust[NUM_AXIES];
 extern float sensors_raw[NUM_AXIES];
 extern float sensors_expected[NUM_AXIES];
 

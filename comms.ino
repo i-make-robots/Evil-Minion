@@ -1,7 +1,7 @@
 #include "pid.h"
 #include "motor.h"
 #include "sensor.h"
-#include "eeprom.h"
+#include "flash.h"
 
 
 
@@ -90,6 +90,39 @@ void ready() {
 }
 
 
+/**
+ * Prevent illegal moves that would obviously damage the machine
+ * @input index the joint index
+ * @input angle the desired angle
+ * @return the corrected angle, clamped within an acceptable range.
+ */
+float software_angle_limits(int index,float angle) {
+  switch(index) {
+    case 0: // A
+//      if( angle > ANGLE_A_MAX ) angle = ANGLE_A_MAX;
+//      if( angle < ANGLE_A_MIN ) angle = ANGLE_A_MIN;
+      break;
+    case 1: // B
+//      if( angle > ANGLE_B_MAX ) angle = ANGLE_B_MAX;
+//      if( angle < ANGLE_B_MIN ) angle = ANGLE_B_MIN;
+      break;
+    case 2: // C
+      if( angle > ANGLE_C_MAX ) angle = ANGLE_C_MAX;
+      if( angle < ANGLE_C_MIN ) angle = ANGLE_C_MIN;
+      break;
+    case 3: // D
+      if( angle > ANGLE_D_MAX ) angle = ANGLE_D_MAX;
+      if( angle < ANGLE_D_MIN ) angle = ANGLE_D_MIN;
+      break;
+    case 4: // E
+      if( angle > ANGLE_E_MAX ) angle = ANGLE_E_MAX;
+      if( angle < ANGLE_E_MIN ) angle = ANGLE_E_MIN;
+      break;
+  }
+  
+  return angle;
+}
+
 
 void process_move_motors() {
   int i;
@@ -98,16 +131,44 @@ void process_move_motors() {
   for(i=0;i<NUM_AXIES;++i) {
     if(!has_code(motor_letters[i])) continue;
     
-//    Serial.print("Moving ");
-//    Serial.println(i);
+    Serial.print("Moving ");
+    Serial.println(i);
     
     v = parse_number(motor_letters[i], 0 );
-    if( absolute_mode==0 ) destination[i] += v;
-    else                   destination[i] = v;
+    if( absolute_mode==0 ) v += destination[i];
+    destination[i] = software_angle_limits(i,v);
     
     PID_init(pid[i]);
     move_active[i]=1;
   }
+}
+
+
+
+void process_sensors_adjust() {
+  int i;
+  
+  for(i=0;i<NUM_AXIES;++i) {
+    if(!has_code(motor_letters[i])) continue;
+    
+    // get the new angle
+    float newAngle = parse_number(motor_letters[i], 0 );
+    // find the difference
+    float diff = newAngle - sensors_raw[i];
+    sensors_adjust[i] = diff;
+  }
+}
+
+
+void print_sensors_adjust() {
+  int i;
+  
+  for(i=0;i<NUM_AXIES;++i) {
+    Serial.print(motor_letters[i]);
+    Serial.print(sensors_adjust[i]);
+    Serial.print(' ');
+  }
+  Serial.println();
 }
 
 
@@ -154,7 +215,7 @@ void process_command() {
   
   if(!strncmp(buffer,"UID",3) && robot_uid==0) {
     robot_uid=atoi(strchr(buffer,' ')+1);
-    SaveUID();
+    saveUID();
   }
 
   
@@ -164,7 +225,7 @@ void process_command() {
   //case 18:  motor_enable();  break;
   //case 17:  motor_disable();  break;
   case 100:  help();  break;
-  //case 101:  processConfig();  break;
+  //case 101:  processconfig();  break;
   case 110:  line_number = parse_number('N',line_number);  break;
   case 114:  where();  break;
   }
@@ -226,6 +287,7 @@ void process_command() {
                 );
       break;
     }*/
+//  case 4:  SD_StartPrintingFile(strchr(buffer,' ')+1);  break;  // read file
   }
 
 
@@ -243,7 +305,9 @@ void process_command() {
     Serial.println(F("Compliance OFF"));
     break;
   case 5:  compliance_limit = parse_number('P',compliance_limit);  break;
-//  case 4:  SD_StartPrintingFile(strchr(buffer,' ')+1);  break;  // read file
+  case 60: process_sensors_adjust();  break;
+  case 61: print_sensors_adjust();  break;
+  case 70: saveAdjustments();  break;
   }
 }
 
