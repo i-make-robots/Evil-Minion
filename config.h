@@ -106,19 +106,31 @@
 
 
 //------------------------------------------------------------------------------
-// PHYSICAL LIMITS
+// PHYSICAL LIMITS & SOFTWARE LIMITS
 //------------------------------------------------------------------------------
-
-#define ANGLE_A_MAX ()
-#define ANGLE_A_MIN ()
-#define ANGLE_B_MAX ()
-#define ANGLE_B_MIN ()
+// The physical limits are used to calibrate the machine.
+#define ANGLE_A_MAX (360-72.90)
+#define ANGLE_A_MIN (72.9)
+#define ANGLE_B_MAX (360-72.90)
+#define ANGLE_B_MIN (72.9)
 #define ANGLE_C_MAX (160.31)
 #define ANGLE_C_MIN (50.57)
 #define ANGLE_D_MAX (173.6)
 #define ANGLE_D_MIN (87.85)
 #define ANGLE_E_MAX (-165)
 #define ANGLE_E_MIN (+165)
+
+// The software limits may (and probably should) be less than the physical limits.
+#define ANGLE_A_MAX (270)
+#define ANGLE_A_MIN (90)
+#define ANGLE_B_MAX (280)
+#define ANGLE_B_MIN (80)
+#define ANGLE_C_MAX (160.31)
+#define ANGLE_C_MIN (50.57)
+#define ANGLE_D_MAX (173.6)
+#define ANGLE_D_MIN (87.85)
+#define ANGLE_E_MAX (180+165)
+#define ANGLE_E_MIN (180-165)
 
 
 
