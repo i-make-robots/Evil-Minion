@@ -126,6 +126,36 @@ void motor_disable() {
 }
 
 
+void motor_step_A(int dir,float pid_adjust) {
+  digitalWrite(PIN_A_DIR, (dir>0) ? HIGH : LOW);
+  while(pid_adjust>0) {
+    pid_adjust--;
+    digitalWrite(PIN_A_STE,HIGH);
+    digitalWrite(PIN_A_STE,LOW);
+  }
+}
+
+
+void motor_step_B(int dir,float pid_adjust) {
+  digitalWrite(PIN_B_DIR, (dir>0) ? HIGH : LOW);
+  while(pid_adjust>0) {
+    pid_adjust--;
+    digitalWrite(PIN_B_STE,HIGH);
+    digitalWrite(PIN_B_STE,LOW);
+  }
+}
+
+
+void motor_step_E(int dir,float pid_adjust) {
+  digitalWrite(PIN_E_DIR, (dir>0) ? HIGH : LOW);
+  while(pid_adjust>0) {
+    pid_adjust--;
+    digitalWrite(PIN_E_STE,HIGH);
+    digitalWrite(PIN_E_STE,LOW);
+  }
+}
+
+
 void motor_move(int motor_index,float pid_adjust) {
   float v;
   float dir = (pid_adjust>0) ? 1.0f : -1.0f;
@@ -133,24 +163,16 @@ void motor_move(int motor_index,float pid_adjust) {
   
   switch(motor_index) {
     case 0:  // a
-      digitalWrite(PIN_A_DIR, (dir>0) ? HIGH : LOW);
-      while(pid_adjust>0) {
-        pid_adjust--;
-        digitalWrite(PIN_A_STE,HIGH);
-        digitalWrite(PIN_A_STE,LOW);
-        sensors_expected[0] += dir / WRIST_STEPS_PER_TURN;
-        if(sensors_expected[0] == destination[0]) break;
-      }
+      motor_step_A(dir,pid_adjust);
+      motor_step_B(-dir,pid_adjust);
+      sensors_expected[0] += dir*pid_adjust / WRIST_STEPS_PER_TURN;
+      if(sensors_expected[0] == destination[0]) break;
     break;
     case 1:  // b
-      digitalWrite(PIN_B_DIR, (dir>0) ? HIGH : LOW);
-      while(pid_adjust>0) {
-        pid_adjust--;
-        digitalWrite(PIN_B_STE,HIGH);
-        digitalWrite(PIN_B_STE,LOW);
-        sensors_expected[1] += dir / WRIST_STEPS_PER_TURN;
-        if(sensors_expected[1] == destination[1]) break;
-      }
+      motor_step_A(dir,pid_adjust);
+      motor_step_B(dir,pid_adjust);
+      sensors_expected[1] += dir*pid_adjust / WRIST_STEPS_PER_TURN;
+      if(sensors_expected[1] == destination[1]) break;
     break;
     case 2:  // c
       digitalWrite(PIN_C_INA,(dir>0) ? HIGH : LOW);
@@ -173,14 +195,9 @@ void motor_move(int motor_index,float pid_adjust) {
       sensors_expected[3] += dir * SENSOR_ANGLE_PER_BIT;
     break;
     case 4:  // e
-      digitalWrite(PIN_E_DIR, (dir>0) ? HIGH : LOW);
-      while(pid_adjust>0) {
-        pid_adjust--;
-        digitalWrite(PIN_E_STE,HIGH);
-        digitalWrite(PIN_E_STE,LOW);
-        sensors_expected[4] += dir / ANCHOR_STEPS_PER_TURN;
-        if(sensors_expected[4] == destination[4]) break;
-      }
+      motor_step_E(dir,pid_adjust);
+      sensors_expected[4] += dir*pid_adjust / ANCHOR_STEPS_PER_TURN;
+      if(sensors_expected[4] == destination[4]) break;
     break;
   }
 }

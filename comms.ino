@@ -98,13 +98,10 @@ void ready() {
  */
 float software_angle_limits(int index,float angle) {
   switch(index) {
-    case 0: // A
-//      if( angle > ANGLE_A_MAX ) angle = ANGLE_A_MAX;
-//      if( angle < ANGLE_A_MIN ) angle = ANGLE_A_MIN;
-      break;
+    case 0:  break;  // A has NO LIMIT.
     case 1: // B
-//      if( angle > ANGLE_B_MAX ) angle = ANGLE_B_MAX;
-//      if( angle < ANGLE_B_MIN ) angle = ANGLE_B_MIN;
+      if( angle > ANGLE_B_MAX ) angle = ANGLE_B_MAX;
+      if( angle < ANGLE_B_MIN ) angle = ANGLE_B_MIN;
       break;
     case 2: // C
       if( angle > ANGLE_C_MAX ) angle = ANGLE_C_MAX;
