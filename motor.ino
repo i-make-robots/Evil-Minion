@@ -163,14 +163,14 @@ void motor_move(int motor_index,float pid_adjust) {
   
   switch(motor_index) {
     case 0:  // a
-      motor_step_A(dir,pid_adjust);
+      motor_step_A(-dir,pid_adjust);
       motor_step_B(-dir,pid_adjust);
       sensors_expected[0] += dir*pid_adjust / WRIST_STEPS_PER_TURN;
       if(sensors_expected[0] == destination[0]) break;
     break;
     case 1:  // b
       motor_step_A(dir,pid_adjust);
-      motor_step_B(dir,pid_adjust);
+      motor_step_B(-dir,pid_adjust);
       sensors_expected[1] += dir*pid_adjust / WRIST_STEPS_PER_TURN;
       if(sensors_expected[1] == destination[1]) break;
     break;
@@ -179,8 +179,6 @@ void motor_move(int motor_index,float pid_adjust) {
       digitalWrite(PIN_C_INB,(dir>0) ? LOW : HIGH);
       v = fabs(pid_adjust) * (255.0-ACTUATOR_C_MIN_PWM) + ACTUATOR_C_MIN_PWM;
       v = max(0,min(255,v));
-//      Serial.print(",PWM=");
-//      Serial.print(v);
       analogWrite(PIN_C_PWM,v);
       sensors_expected[2] += dir * SENSOR_ANGLE_PER_BIT;
     break;
@@ -189,8 +187,6 @@ void motor_move(int motor_index,float pid_adjust) {
       digitalWrite(PIN_D_INB,(dir>0) ? LOW : HIGH);
       v = fabs(pid_adjust) * (255.0-ACTUATOR_D_MIN_PWM) + ACTUATOR_D_MIN_PWM;
       v = max(0,min(255,v));
-//      Serial.print(",PWM=");
-//      Serial.print(v);
       analogWrite(PIN_D_PWM,v);
       sensors_expected[3] += dir * SENSOR_ANGLE_PER_BIT;
     break;
