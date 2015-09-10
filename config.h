@@ -73,8 +73,8 @@
 // PID tuning
 #define PID_EPSILON (0.001)
 #define PID_KP (0.25)
-#define PID_KI (0.25)
-#define PID_KD (0.000)
+#define PID_KI (0.05)
+#define PID_KD (0.0001)
 
 
 // Comms
