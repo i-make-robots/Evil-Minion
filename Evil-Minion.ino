@@ -83,38 +83,12 @@ void setup() {
   continuous_reporting = 0;
   compliance_limit = COMPLIANCE_DEFAULT_EPSILON;
   
+  servo_setup();
+  
   help();
   ready();
   
   m0 = millis();
-}
-
-
-void test_piston_C(int dir,int pwm) {
-  digitalWrite(PIN_C_INA,(dir>0) ? HIGH : LOW);
-  digitalWrite(PIN_C_INB,(dir>0) ? LOW : HIGH);
-  analogWrite(PIN_C_PWM,pwm);
-}
-
-
-void test_piston_D(int dir,int pwm) {
-  digitalWrite(PIN_D_INA,(dir>0) ? HIGH : LOW);
-  digitalWrite(PIN_D_INB,(dir>0) ? LOW : HIGH);
-  analogWrite(PIN_D_PWM,pwm);
-}
-
-
-void test_piston() {
-  int dir, pwm;
-  
-  for(pwm=0;pwm<255;++pwm) {
-    Serial.println(pwm);
-    //test_piston_D(1,pwm);
-    //test_piston_D(-1,pwm);
-    test_piston_C(1,pwm);
-    //test_piston_C(-1,pwm);
-    delay(100);
-  }
 }
 
 

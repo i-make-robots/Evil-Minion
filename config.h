@@ -61,13 +61,11 @@
 
 
 // ATC
-//#define HAS_ATC // uncomment if this minion has an automatic tool changer
-#ifdef HAS_ATC
-#define PIN_ATC_RX  (7)
-#define PIN_ATC_TX  (6)
-#define PIN_ATC_EN_5V  (12)
-#define PIN_ATC_EN_12V (11)
-#endif  // HAS_ATC
+//#define PIN_ATC_GND        // ATC pin 1
+#define PIN_ATC_RX     (7)   // ATC pin 2
+#define PIN_ATC_TX     (6)   // ATC pin 3
+#define PIN_ATC_EN_5V  (12)  // ATC pin 4
+#define PIN_ATC_EN_12V (11)  // ATC pin 5
 
 
 // PID tuning

@@ -15,6 +15,8 @@ char absolute_mode = DEFAULT_IS_ABSOLUTE_ON;
 
 
 
+
+
 void comms_setup() {
   Serial.begin(BAUD_RATE);
   line_number=0;
@@ -75,6 +77,9 @@ void where() {
     Serial.print(sensors_raw[i]);
     Serial.print(' ');
   }
+  
+  Serial.print('S');
+  Serial.print(servo_angle);
   
   Serial.print('\n');
 }
@@ -147,6 +152,14 @@ void process_move_motors() {
     PID_init(pid[i]);
     move_active[i]=1;
   }
+}
+
+
+void process_servo_command() {
+  if(!has_code('S')) return;
+  
+  int v = parse_number('S',servo_angle);
+  servo_move(v);
 }
 
 
@@ -313,6 +326,7 @@ void process_command() {
     Serial.println(compliant_mode==1?F("ON"):F("OFF"));
     break;
   case 5:  compliance_limit = parse_number('P',compliance_limit);  break;
+  case 10: process_servo_command();  break;
   case 60: process_sensors_adjust();  break;
   case 61: print_sensors_adjust();  break;
   case 70: saveAdjustments();  break;

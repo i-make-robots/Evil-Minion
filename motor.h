@@ -9,6 +9,11 @@
 extern char *motor_letters;
 extern PIDobject pid[NUM_AXIES];
 
+extern int servo_angle;
+
+
+void servo_setup();
+void servo_move(int angle);
 
 void test_stepper(int dir,int ste,int ena,int wait);
 void test_dual_steppers(int dir1,int ste1,int ena1,

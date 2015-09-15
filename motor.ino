@@ -1,11 +1,31 @@
 #include "motor.h"
 #include "sensor.h"
+#include <Servo.h>
 
 
 
 char *motor_letters = "ABCDE";
 PIDobject pid[NUM_AXIES];
 
+// @TEST Servo stuff
+Servo toolServo;
+int servo_angle;
+
+
+
+void servo_setup() {
+  toolServo.attach(PIN_ATC_TX);
+  servo_angle=120;
+  toolServo.write(servo_angle);
+}
+
+
+void servo_move(int angle) {
+  if(angle<120) angle=120;
+  if(angle>170) angle=170;
+  servo_angle = angle;
+  toolServo.write(angle);
+}
 
 
 void test_stepper(int dir,int ste,int ena,int wait) {
@@ -109,6 +129,44 @@ void test_motors() {
   
   //test_dual_steppers(PIN_B_DIR,PIN_B_STE,PIN_B_ENA,
   //                   PIN_A_DIR,PIN_A_STE,PIN_A_ENA,5);
+}
+
+
+void test_servo_wave() {
+  Serial.println("open");
+  toolServo.write(20);
+  delay(1000);
+  Serial.println("close");
+  toolServo.write(160); 
+  delay(1000);
+}
+
+
+void test_piston_C(int dir,int pwm) {
+  digitalWrite(PIN_C_INA,(dir>0) ? HIGH : LOW);
+  digitalWrite(PIN_C_INB,(dir>0) ? LOW : HIGH);
+  analogWrite(PIN_C_PWM,pwm);
+}
+
+
+void test_piston_D(int dir,int pwm) {
+  digitalWrite(PIN_D_INA,(dir>0) ? HIGH : LOW);
+  digitalWrite(PIN_D_INB,(dir>0) ? LOW : HIGH);
+  analogWrite(PIN_D_PWM,pwm);
+}
+
+
+void test_piston() {
+  int dir, pwm;
+  
+  for(pwm=0;pwm<255;++pwm) {
+    Serial.println(pwm);
+    //test_piston_D(1,pwm);
+    //test_piston_D(-1,pwm);
+    test_piston_C(1,pwm);
+    //test_piston_C(-1,pwm);
+    delay(100);
+  }
 }
 
 
