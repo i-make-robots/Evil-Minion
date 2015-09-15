@@ -128,9 +128,6 @@ void process_move_motors() {
   for(i=0;i<NUM_AXIES;++i) {
     if(!has_code(motor_letters[i])) continue;
     
-    Serial.print("Moving ");
-    Serial.println(i);
-    
     if( absolute_mode==0 ) {
       v = parse_number(motor_letters[i], 0 );
       v += destination[i];
@@ -139,11 +136,18 @@ void process_move_motors() {
     }
     destination[i] = software_angle_limits(i,v);
     
+//    Serial.print(F("Moving "));
+//    Serial.print(absolute_mode==0?F("REL "):F("ABS "));
+//    Serial.print(motor_letters[i]);
+//    Serial.print(F(" to "));
+//    Serial.print(v);
+//    Serial.print(F(" ~ "));
+//    Serial.println(destination[i]);
+    
     PID_init(pid[i]);
     move_active[i]=1;
   }
 }
-
 
 
 void process_sensors_adjust() {
@@ -155,7 +159,14 @@ void process_sensors_adjust() {
     // get the new angle
     float newAngle = parse_number(motor_letters[i], 0 );
     // find the difference
-    float diff = newAngle - sensors_raw[i];
+    float original_angle = sensors_raw[i] - sensors_adjust[i];
+    float diff = newAngle - original_angle;
+    Serial.print("i=");  Serial.println(i);
+    Serial.print("motor_letters[i]=");  Serial.println(motor_letters[i]);
+    Serial.print("sensors_adjust[i]=");  Serial.println(sensors_adjust[i]);
+    Serial.print("sensor_angle(i)=");  Serial.println(sensor_angle(i));
+    Serial.print("newAngle=");  Serial.println(newAngle);
+    Serial.print("diff=");  Serial.println(diff);
     sensors_adjust[i] = diff;
   }
 }

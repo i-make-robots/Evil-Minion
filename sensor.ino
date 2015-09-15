@@ -109,6 +109,7 @@ int sensor_error(uint32_t data,int beVerbose) {
 }
 
 
+
 void test_one_sensor(int sensor_number,int csel_pin,int sdout_pin) {
   uint32_t d = sensor_update(csel_pin,sdout_pin);
 //  Serial.print(d,BIN);

@@ -79,7 +79,7 @@
 
 // Comms
 #define BAUD_RATE (57600)
-#define MAX_BUF   (32)
+#define MAX_BUF   (64)
 
 
 // Misc
@@ -96,7 +96,7 @@
 
 // Actuator math
 // The minimum PWM signal to send that will move an actuator.  0-255, inclusive.
-#define ACTUATOR_C_MIN_PWM  (25.0)
+#define ACTUATOR_C_MIN_PWM  (15.0)
 #define ACTUATOR_D_MIN_PWM  (25.0)
 
 #define COMPLIANCE_DEFAULT_EPSILON (0.1)  // get within this many degrees of destination before stopping
