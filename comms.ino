@@ -66,7 +66,21 @@ void help() {
   Serial.println(robot_uid);
   Serial.println(F("== http://www.marginallyclever.com/ =="));
   Serial.println(F("I understand the following commands:"));
-  Serial.println(F("G00,G01,G02,G03,G04,G28,G90,G91,G92,M18,M100,M114"));
+  Serial.println(F("Nx *y (this is line number x, with checksum y)\n"\
+"UID * (write robot UID * to EEPROM)\n"\
+"M100 (help)\n"\
+"M110 N* (set line number to *)\n"\
+"M114 (where)\n"\
+"G90 (absolute mode)\n"\
+"G91 (relative mode)\n"\
+"R0 [Aa] [Bb] [Cc] [Dd] [Ed] (move motors so that sensors read [abcde])\n"\
+"R1 (continuous angle reporting)\n"\
+"R3 (toggle compliant mode)\n"\
+"R5 (adjust compliant mode)\n"\
+"R10 S* (adjust servo angle to *)\n"\
+"R60 [Aa] [Bb] [Cc] [Dd] [Ed] (set sensors to new value [abcde])\n"\
+"R61 (display sensor adjustment amounts)\n"\
+"R70 (write sensor adjustments to EEPROM)\n"));
 }
 
 
@@ -171,15 +185,17 @@ void process_sensors_adjust() {
     
     // get the new angle
     float newAngle = parse_number(motor_letters[i], 0 );
-    // find the difference
+    // get the original sensor angle (without adjustment)
     float original_angle = sensors_raw[i] - sensors_adjust[i];
+    // find the difference
     float diff = newAngle - original_angle;
-    Serial.print("i=");  Serial.println(i);
-    Serial.print("motor_letters[i]=");  Serial.println(motor_letters[i]);
-    Serial.print("sensors_adjust[i]=");  Serial.println(sensors_adjust[i]);
-    Serial.print("sensor_angle(i)=");  Serial.println(sensor_angle(i));
-    Serial.print("newAngle=");  Serial.println(newAngle);
-    Serial.print("diff=");  Serial.println(diff);
+//    Serial.print("i=");  Serial.println(i);
+//    Serial.print("motor_letters[i]=");  Serial.println(motor_letters[i]);
+//    Serial.print("sensors_adjust[i]=");  Serial.println(sensors_adjust[i]);
+//    Serial.print("sensor_angle(i)=");  Serial.println(sensor_angle(i));
+//    Serial.print("newAngle=");  Serial.println(newAngle);
+//    Serial.print("diff=");  Serial.println(diff);
+    // save it
     sensors_adjust[i] = diff;
   }
 }

@@ -69,7 +69,6 @@ void setup() {
   setup_sensors();
   tick_sensors();
   
- 
   
   int i;
   for(i=0;i<NUM_AXIES;++i) {

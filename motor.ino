@@ -133,10 +133,8 @@ void test_motors() {
 
 
 void test_servo_wave() {
-  Serial.println("open");
   toolServo.write(20);
   delay(1000);
-  Serial.println("close");
   toolServo.write(160); 
   delay(1000);
 }

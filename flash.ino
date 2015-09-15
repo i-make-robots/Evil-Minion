@@ -65,6 +65,7 @@ void loadConfig() {
     }
   }
 
+  robot_uid = EEPROM_readLong(ADDR_GUID);
   sensors_adjust[0] = EEPROM_readFloat(ADDR_ADJ_A);
   sensors_adjust[1] = EEPROM_readFloat(ADDR_ADJ_B);
   sensors_adjust[2] = EEPROM_readFloat(ADDR_ADJ_C);
@@ -83,7 +84,7 @@ void saveAdjustments() {
   EEPROM_writeFloat(ADDR_ADJ_C,sensors_adjust[2]);
   EEPROM_writeFloat(ADDR_ADJ_D,sensors_adjust[3]);
   EEPROM_writeFloat(ADDR_ADJ_E,sensors_adjust[4]);
-  Serial.println(F("Saved adjustments."));
+  Serial.println(F("Calibration saved."));
 }
 
 
