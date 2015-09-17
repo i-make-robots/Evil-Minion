@@ -5,7 +5,6 @@ float sensors_raw[NUM_AXIES];
 float sensors_expected[NUM_AXIES];
 
 
-//
 void setup_sensors() {
 }
 

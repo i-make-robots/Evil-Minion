@@ -95,32 +95,32 @@ void loop() {
   tick_comms();
   tick_sensors();
   
-  if(continuous_reporting==1) {
-    where();
-  }
-  
   m1 = millis();
   float dt = ((m1-m0)*0.001);
-  if(dt >= 0.01) {
+  if(dt >= 0.05) 
+  {
     m0 = m1;
-    
-    char can_comply=comply();
-    if( is_target_set() ) {
-      if( can_comply ) {
-        // move motors
-        tick_motors(dt);
-      } else {
-        // collision!
-        Serial.println(F("Collision"));
-        motor_all_stop();
-      }
+    if(continuous_reporting==1) {
+      where();
+    }
+  }
+   
+  char can_comply=comply();
+  if( is_target_set() ) {
+    if( can_comply ) {
+      // move motors
+      tick_motors(dt);
     } else {
-      // no target set
-      if( can_comply==0 ) {
-        // pushed
-        Serial.println(F("Pushed"));
-        respond_to_push();
-      }
+      // collision!
+      Serial.println(F("Collision"));
+      motor_all_stop();
+    }
+  } else {
+    // no target set
+    if( can_comply==0 ) {
+      // pushed
+      Serial.println(F("Pushed"));
+      respond_to_push();
     }
   }
 }
