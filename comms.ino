@@ -68,6 +68,8 @@ void help() {
   Serial.println(F("I understand the following commands:"));
   Serial.println(F("Nx *y (this is line number x, with checksum y)\n"\
 "UID * (write robot UID * to EEPROM)\n"\
+"M17 (disable motors)\n"\
+"M18 (enable motors)\n"\
 "M100 (help)\n"\
 "M110 N* (set line number to *)\n"\
 "M114 (where)\n"\
@@ -76,7 +78,7 @@ void help() {
 "R0 [Aa] [Bb] [Cc] [Dd] [Ed] (move motors so that sensors read [abcde])\n"\
 "R1 (continuous angle reporting)\n"\
 "R3 (toggle compliant mode)\n"\
-"R5 (adjust compliant mode)\n"\
+"R5 P* (adjust compliance limit to *)\n"\
 "R10 S* (adjust servo angle to *)\n"\
 "R60 [Aa] [Bb] [Cc] [Dd] [Ed] (set sensors to new value [abcde])\n"\
 "R61 (display sensor adjustment amounts)\n"\
@@ -166,6 +168,7 @@ void process_move_motors() {
     PID_init(pid[i]);
     move_active[i]=1;
   }
+  
 }
 
 
@@ -263,8 +266,8 @@ void process_command() {
   cmd=parse_number('M',-1);
   switch(cmd) {
   //case 6:  tool_change(parse_number('T',current_tool));  break;
-  //case 18:  motor_enable();  break;
-  //case 17:  motor_disable();  break;
+  case 17:  motor_disable();  break;
+  case 18:  motor_enable();  break;
   case 100:  help();  break;
   //case 101:  processconfig();  break;
   case 110:  line_number = parse_number('N',line_number);  break;

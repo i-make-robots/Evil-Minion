@@ -170,21 +170,24 @@ void test_piston() {
 
 // turn on power to the motors (make them immobile)
 void motor_enable() {
-  Serial.println(F("NOT IMPLEMENTED"));
-  while(1);
+  digitalWrite(PIN_A_ENA,LOW);
+  digitalWrite(PIN_B_ENA,LOW);
+  digitalWrite(PIN_E_ENA,LOW);
 }
 
 
 // turn off power to the motors (make them move freely)
 void motor_disable() {
-  Serial.println(F("NOT IMPLEMENTED"));
-  while(1);
+  digitalWrite(PIN_A_ENA,HIGH);
+  digitalWrite(PIN_B_ENA,HIGH);
+  digitalWrite(PIN_E_ENA,HIGH);
 }
 
 
 void motor_step_A(int dir,float pid_adjust) {
   digitalWrite(PIN_A_DIR, (dir>0) ? HIGH : LOW);
-  while(pid_adjust>0) {
+  //while(pid_adjust>0)
+  {
     pid_adjust--;
     digitalWrite(PIN_A_STE,HIGH);
     digitalWrite(PIN_A_STE,LOW);
@@ -194,7 +197,8 @@ void motor_step_A(int dir,float pid_adjust) {
 
 void motor_step_B(int dir,float pid_adjust) {
   digitalWrite(PIN_B_DIR, (dir>0) ? HIGH : LOW);
-  while(pid_adjust>0) {
+  //while(pid_adjust>0)
+  {
     pid_adjust--;
     digitalWrite(PIN_B_STE,HIGH);
     digitalWrite(PIN_B_STE,LOW);
@@ -204,7 +208,8 @@ void motor_step_B(int dir,float pid_adjust) {
 
 void motor_step_E(int dir,float pid_adjust) {
   digitalWrite(PIN_E_DIR, (dir>0) ? HIGH : LOW);
-  while(pid_adjust>0) {
+  //while(pid_adjust>0)
+  {
     pid_adjust--;
     digitalWrite(PIN_E_STE,HIGH);
     digitalWrite(PIN_E_STE,LOW);
