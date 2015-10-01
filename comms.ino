@@ -75,6 +75,7 @@ void help() {
 "M114 (where)\n"\
 "G90 (absolute mode)\n"\
 "G91 (relative mode)\n"\
+"G92 [Aa] (teleport)\n"\
 "R0 [Aa] [Bb] [Cc] [Dd] [Ed] (move motors so that sensors read [abcde])\n"\
 "R1 (continuous angle reporting)\n"\
 "R3 (toggle compliant mode)\n"\
@@ -90,7 +91,7 @@ void where() {
   int i;
   for(i=0;i<NUM_AXIES;++i) {
     Serial.print(motor_letters[i]);
-    Serial.print(sensors_raw[i]);
+    Serial.print(sensors_filtered[i]);
     Serial.print(' ');
   }
   
@@ -189,7 +190,7 @@ void process_sensors_adjust() {
     // get the new angle
     float newAngle = parse_number(motor_letters[i], 0 );
     // get the original sensor angle (without adjustment)
-    float original_angle = sensors_raw[i] - sensors_adjust[i];
+    float original_angle = sensors_filtered[i] - sensors_adjust[i];
     // find the difference
     float diff = newAngle - original_angle;
 //    Serial.print("i=");  Serial.println(i);
@@ -215,6 +216,10 @@ void print_sensors_adjust() {
   Serial.println();
 }
 
+
+void parse_teleport() {
+  sensors_filtered[0] = parse_number('A',0);
+}
 
 /**
  * process commands in the serial receive buffer
@@ -322,15 +327,7 @@ void process_command() {
     }*/
   case 90:  absolute_mode=1;  break;  // absolute mode
   case 91:  absolute_mode=0;  break;  // relative mode
-  /*
-  case 92: {  // set position (teleport)
-      Vector3 offset = get_end_plus_offset();
-      teleport( parse_number('X',offset.x),
-                parse_number('Y',offset.y)
-              //, parse_number('Z',offset.z)
-                );
-      break;
-    }*/
+  case 92:  parse_teleport();  break;
 //  case 4:  SD_StartPrintingFile(strchr(buffer,' ')+1);  break;  // read file
   }
 

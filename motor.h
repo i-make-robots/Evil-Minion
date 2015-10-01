@@ -12,7 +12,7 @@ extern PIDobject pid[NUM_AXIES];
 extern int servo_angle;
 
 
-void servo_setup();
+void motor_setup();
 void servo_move(int angle);
 
 void test_stepper(int dir,int ste,int ena,int wait);

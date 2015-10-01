@@ -27,62 +27,21 @@ float compliance_limit;
 
 
 void setup() {
-  // STEPPER MOTORS & LINEAR ACTUATORS
-  // A
-  pinMode(PIN_A_DIR,OUTPUT);
-  pinMode(PIN_A_STE,OUTPUT);
-  pinMode(PIN_A_ENA,OUTPUT);
-  // B
-  pinMode(PIN_B_DIR,OUTPUT);
-  pinMode(PIN_B_STE,OUTPUT);
-  pinMode(PIN_B_ENA,OUTPUT);
-  // C  
-  pinMode(PIN_C_INA,OUTPUT);
-  pinMode(PIN_C_PWM,OUTPUT);
-  pinMode(PIN_C_INB,OUTPUT);
-  // D
-  pinMode(PIN_D_INA,OUTPUT);
-  pinMode(PIN_D_PWM,OUTPUT);
-  pinMode(PIN_D_INB,OUTPUT);
-  // E
-  pinMode(PIN_E_DIR,OUTPUT);
-  pinMode(PIN_E_STE,OUTPUT);
-  pinMode(PIN_E_ENA,OUTPUT);
-
-  motor_all_stop();
-  
-  
-  // SENSORS
-  pinMode(PIN_SENSOR_CLK,OUTPUT);
-  pinMode(PIN_SENSOR_SDOUT_E,INPUT);
-  pinMode(PIN_SENSOR_SDOUT_D,INPUT);
-
-  pinMode(PIN_SENSOR_A_CSEL,OUTPUT);  // A
-  pinMode(PIN_SENSOR_B_CSEL,OUTPUT);  // B
-  pinMode(PIN_SENSOR_C_CSEL,OUTPUT);  // C
-  pinMode(PIN_SENSOR_D_CSEL,OUTPUT);  // D
-  pinMode(PIN_SENSOR_E_CSEL,OUTPUT);  // E
-
-  
   comms_setup();
   loadConfig();
+  motor_setup();
   setup_sensors();
-  tick_sensors();
-  
   
   int i;
   for(i=0;i<NUM_AXIES;++i) {
     // PIDs
     PID_init(pid[i]);
     move_active[i]=0;
-    sensors_expected[i] = sensors_raw[i];
   } 
   
   compliant_mode = 0;
   continuous_reporting = 0;
   compliance_limit = COMPLIANCE_DEFAULT_EPSILON;
-  
-  servo_setup();
   
   help();
   ready();
@@ -95,16 +54,16 @@ void loop() {
   tick_comms();
   tick_sensors();
   
+  // post a position update every 50ms.  No need to overdo it...
   m1 = millis();
   float dt = ((m1-m0)*0.001);
-  if(dt >= 0.05) 
-  {
+  if(dt >= 0.05) {
     m0 = m1;
     if(continuous_reporting==1) {
       where();
     }
   }
-   
+
   char can_comply=comply();
   if( is_target_set() ) {
     if( can_comply ) {
@@ -128,9 +87,7 @@ void loop() {
 
 void respond_to_push() {
   int i;
-  for(i=0;i<NUM_AXIES;++i) {
-    
-  }
+  for(i=0;i<NUM_AXIES;++i) {}
 }
 
 
@@ -140,6 +97,7 @@ char is_target_set() {
   for(i=0;i<NUM_AXIES;++i) {
     if( move_active[i]!=0 ) return 1;
   }
+  
   return 0;
 }
 
@@ -157,7 +115,7 @@ char comply() {
   
   for(i=0;i<NUM_AXIES;++i) {
     // if expected sensor too far from actual sensor then interference
-    ds = sensors_expected[i] - sensors_raw[i];
+    ds = sensors_expected[i] - sensors_filtered[i];
     
     if(fabs(ds) > compliance_limit) {
       Serial.print(i);

@@ -83,6 +83,7 @@
 // Misc
 #define NUM_AXIES (5)
 
+
 // Stepper math
 #define MOTOR_STEPS_PER_TURN   (400.0)
 #define MOTOR_MICROSTEPPING    (16.0)
@@ -92,10 +93,13 @@
 #define WRIST_STEPS_PER_TURN   (TOTAL_STEPS_PER_TURN*WRIST_GEAR_RATIO)
 #define ANCHOR_STEPS_PER_TURN  (TOTAL_STEPS_PER_TURN*ANCHOR_GEAR_RATIO)
 
+
 // Actuator math
 // The minimum PWM signal to send that will move an actuator.  0-255, inclusive.
 #define ACTUATOR_C_MIN_PWM  (15.0)
 #define ACTUATOR_D_MIN_PWM  (25.0)
+#define ACTUATOR_C_MAX_PWM  (255.0)
+#define ACTUATOR_D_MAX_PWM  (255.0)
 
 #define COMPLIANCE_DEFAULT_EPSILON (0.1)  // get within this many degrees of destination before stopping
 
@@ -176,5 +180,7 @@ extern char move_active[NUM_AXIES];
 extern float compliance_time[NUM_AXIES];
 extern char continuous_reporting;
 extern char compliant_mode;
+
+
 
 #endif // CONFIG_H

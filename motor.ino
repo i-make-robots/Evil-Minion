@@ -12,6 +12,33 @@ Servo toolServo;
 int servo_angle;
 
 
+void motor_setup() {
+  // A
+  pinMode(PIN_A_DIR,OUTPUT);
+  pinMode(PIN_A_STE,OUTPUT);
+  pinMode(PIN_A_ENA,OUTPUT);
+  // B
+  pinMode(PIN_B_DIR,OUTPUT);
+  pinMode(PIN_B_STE,OUTPUT);
+  pinMode(PIN_B_ENA,OUTPUT);
+  // C  
+  pinMode(PIN_C_INA,OUTPUT);
+  pinMode(PIN_C_PWM,OUTPUT);
+  pinMode(PIN_C_INB,OUTPUT);
+  // D
+  pinMode(PIN_D_INA,OUTPUT);
+  pinMode(PIN_D_PWM,OUTPUT);
+  pinMode(PIN_D_INB,OUTPUT);
+  // E
+  pinMode(PIN_E_DIR,OUTPUT);
+  pinMode(PIN_E_STE,OUTPUT);
+  pinMode(PIN_E_ENA,OUTPUT);
+
+  motor_all_stop();
+  servo_setup();
+  //test_motors();
+}
+
 
 void servo_setup() {
   toolServo.attach(PIN_ATC_TX);
@@ -83,7 +110,7 @@ void test_dual_steppers(int dir1,int ste1,int ena1,
 }
 
 
-void test_actuator(int ina,int pwm,int inb,int wait) {
+void test_actuator_out(int ina,int pwm,int inb,int wait) {
   int i;
   
   // out
@@ -99,7 +126,13 @@ void test_actuator(int ina,int pwm,int inb,int wait) {
     analogWrite(pwm,255-i);
     delay(wait);
   }
+  digitalWrite(inb,LOW);
+  digitalWrite(ina,LOW);
+}
 
+
+void test_actuator_in(int ina,int pwm,int inb,int wait) {
+  int i;
   // in
   Serial.println("in");
   digitalWrite(ina,LOW);
@@ -120,8 +153,11 @@ void test_actuator(int ina,int pwm,int inb,int wait) {
 
 
 void test_motors() {
-  test_actuator(PIN_D_INA,PIN_D_PWM,PIN_D_INB, 4);
-  test_actuator(PIN_C_INA,PIN_C_PWM,PIN_C_INB, 4);
+  //test_actuator_out(PIN_D_INA,PIN_D_PWM,PIN_D_INB, 4);
+  test_actuator_in(PIN_D_INA,PIN_D_PWM,PIN_D_INB, 4);
+
+  //test_actuator_out(PIN_C_INA,PIN_C_PWM,PIN_C_INB, 4);
+  test_actuator_in(PIN_C_INA,PIN_C_PWM,PIN_C_INB, 4);
   
   //test_stepper(PIN_E_DIR,PIN_E_STE,PIN_E_ENA, 5);  // E
   //test_stepper(PIN_B_DIR,PIN_B_STE,PIN_B_ENA, 5);  // B
@@ -186,7 +222,7 @@ void motor_disable() {
 
 void motor_step_A(int dir,float pid_adjust) {
   digitalWrite(PIN_A_DIR, (dir>0) ? HIGH : LOW);
-  //while(pid_adjust>0)
+  while(pid_adjust>0)
   {
     pid_adjust--;
     digitalWrite(PIN_A_STE,HIGH);
@@ -197,7 +233,7 @@ void motor_step_A(int dir,float pid_adjust) {
 
 void motor_step_B(int dir,float pid_adjust) {
   digitalWrite(PIN_B_DIR, (dir>0) ? HIGH : LOW);
-  //while(pid_adjust>0)
+  while(pid_adjust>0)
   {
     pid_adjust--;
     digitalWrite(PIN_B_STE,HIGH);
@@ -208,7 +244,7 @@ void motor_step_B(int dir,float pid_adjust) {
 
 void motor_step_E(int dir,float pid_adjust) {
   digitalWrite(PIN_E_DIR, (dir>0) ? HIGH : LOW);
-  //while(pid_adjust>0)
+  while(pid_adjust>0)
   {
     pid_adjust--;
     digitalWrite(PIN_E_STE,HIGH);
@@ -238,16 +274,16 @@ void motor_move(int motor_index,float pid_adjust) {
     case 2:  // c
       digitalWrite(PIN_C_INA,(dir>0) ? HIGH : LOW);
       digitalWrite(PIN_C_INB,(dir>0) ? LOW : HIGH);
-      v = fabs(pid_adjust) * (255.0-ACTUATOR_C_MIN_PWM) + ACTUATOR_C_MIN_PWM;
-      v = max(0,min(255,v));
+      v = fabs(pid_adjust) * (ACTUATOR_C_MAX_PWM-ACTUATOR_C_MIN_PWM) + ACTUATOR_C_MIN_PWM;
+      v = max(ACTUATOR_C_MIN_PWM,min(ACTUATOR_C_MAX_PWM,v));
       analogWrite(PIN_C_PWM,v);
       sensors_expected[2] += dir * SENSOR_ANGLE_PER_BIT;
     break;
     case 3:  // d
       digitalWrite(PIN_D_INA,(dir>0) ? HIGH : LOW);
       digitalWrite(PIN_D_INB,(dir>0) ? LOW : HIGH);
-      v = fabs(pid_adjust) * (255.0-ACTUATOR_D_MIN_PWM) + ACTUATOR_D_MIN_PWM;
-      v = max(0,min(255,v));
+      v = fabs(pid_adjust) * (ACTUATOR_D_MAX_PWM-ACTUATOR_D_MIN_PWM) + ACTUATOR_D_MIN_PWM;
+      v = max(ACTUATOR_D_MIN_PWM,min(ACTUATOR_D_MAX_PWM,v));
       analogWrite(PIN_D_PWM,v);
       sensors_expected[3] += dir * SENSOR_ANGLE_PER_BIT;
     break;
@@ -282,7 +318,7 @@ void tick_motors(float dt) {
 //    Serial.print(i);
 //    Serial.print(":");
     
-    v = PID_step(pid[i], destination[i],sensors_raw[i],dt);
+    v = PID_step(pid[i], destination[i],sensors_filtered[i],dt);
 /*
     Serial.print("D=");
     Serial.print(destination[i]);
@@ -293,10 +329,10 @@ void tick_motors(float dt) {
 //*/
     motor_move(i,v);
 //    Serial.print("\n");
-    if(fabs(destination[i]-sensors_raw[i]) <= SENSOR_ANGLE_PER_BIT ) {
+    if(fabs(destination[i]-sensors_filtered[i]) <= SENSOR_ANGLE_PER_BIT ) {
       //Serial.print("Stopping ");
       //Serial.println(i);
-      sensors_expected[i] = sensors_raw[i];
+      sensors_expected[i] = sensors_filtered[i];
       move_active[i]=0;
       if(i==2) {
         digitalWrite(PIN_C_INA,LOW);
