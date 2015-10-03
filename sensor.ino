@@ -3,7 +3,6 @@
 // dan@marginallyclever.com 
 // 2015 September 3
 // see http://evilminion.info/ for more information.
-// GPL CC-BY-SA-NC
 //--------------------------------------------------------
 #include "sensor.h"
 
@@ -176,16 +175,11 @@ float update_angle(float prevAngle, float sensorValue) {
 
 
 void tick_sensors() {
-  test_one_sensor(0,PIN_SENSOR_A_CSEL,PIN_SENSOR_SDOUT_A);
-  sensors_filtered[0] = update_angle(sensors_filtered[0],sensors_raw[0]);
-  test_one_sensor(1,PIN_SENSOR_B_CSEL,PIN_SENSOR_SDOUT_B);
-  test_one_sensor(2,PIN_SENSOR_C_CSEL,PIN_SENSOR_SDOUT_C);
-  test_one_sensor(3,PIN_SENSOR_D_CSEL,PIN_SENSOR_SDOUT_D);
-  test_one_sensor(4,PIN_SENSOR_E_CSEL,PIN_SENSOR_SDOUT_E);
-  sensors_filtered[1] = sensors_raw[1];
-  sensors_filtered[2] = sensors_raw[2];
-  sensors_filtered[3] = sensors_raw[3];
-  sensors_filtered[4] = sensors_raw[4];
+  test_one_sensor(0,PIN_SENSOR_A_CSEL,PIN_SENSOR_SDOUT_A);  sensors_filtered[0] = update_angle(sensors_filtered[0],sensors_raw[0]);
+  test_one_sensor(1,PIN_SENSOR_B_CSEL,PIN_SENSOR_SDOUT_B);  sensors_filtered[1] = sensors_raw[1];
+  test_one_sensor(2,PIN_SENSOR_C_CSEL,PIN_SENSOR_SDOUT_C);  sensors_filtered[2] = sensors_raw[2];
+  test_one_sensor(3,PIN_SENSOR_D_CSEL,PIN_SENSOR_SDOUT_D);  sensors_filtered[3] = sensors_raw[3];
+  test_one_sensor(4,PIN_SENSOR_E_CSEL,PIN_SENSOR_SDOUT_E);  sensors_filtered[4] = sensors_raw[4];
 }
 
 

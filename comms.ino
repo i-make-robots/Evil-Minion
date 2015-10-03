@@ -3,7 +3,6 @@
 // dan@marginallyclever.com 
 // 2015 September 3
 // see http://evilminion.info/ for more information.
-// GPL CC-BY-SA-NC
 //--------------------------------------------------------
 #include "pid.h"
 #include "motor.h"

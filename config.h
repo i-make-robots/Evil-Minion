@@ -5,7 +5,6 @@
 // dan@marginallyclever.com 
 // 2015 September 3
 // see http://evilminion.info/ for more information.
-// GPL CC-BY-SA-NC
 //--------------------------------------------------------
 
 #include <Arduino.h>
@@ -88,6 +87,9 @@
 
 // Misc
 #define NUM_AXIES (5)
+#define NUM_TOOLS            (6)
+#define MAX_SEGMENTS         (32)  // number of line segments to buffer ahead
+#define MM_PER_SEGMENT       (10)  // Arcs are split into many line segments.  How long are the segments?
 
 
 // Stepper math
@@ -98,6 +100,11 @@
 #define ANCHOR_GEAR_RATIO      (80.0/8.0)  // large gear # teeth / small gear # teeth
 #define WRIST_STEPS_PER_TURN   (TOTAL_STEPS_PER_TURN*WRIST_GEAR_RATIO)
 #define ANCHOR_STEPS_PER_TURN  (TOTAL_STEPS_PER_TURN*ANCHOR_GEAR_RATIO)
+
+#define MAX_FEEDRATE         (30000.0)  // depends on timer interrupt & hardware
+#define MIN_FEEDRATE         (1000)
+#define DEFAULT_FEEDRATE     (8500.0)
+#define DEFAULT_ACCELERATION (250)
 
 
 // Actuator math
@@ -178,6 +185,11 @@
 
 
 //------------------------------------------------------------------------------
+// STRUCTURES
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
 // GLOBALS
 //------------------------------------------------------------------------------
 extern long robot_uid;
@@ -186,7 +198,6 @@ extern char move_active[NUM_AXIES];
 extern float compliance_time[NUM_AXIES];
 extern char continuous_reporting;
 extern char compliant_mode;
-
 
 
 #endif // CONFIG_H
