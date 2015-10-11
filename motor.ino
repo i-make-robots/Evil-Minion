@@ -249,7 +249,7 @@ void motor_step_B(int dir,float pid_adjust) {
 
 
 void motor_step_E(int dir,float pid_adjust) {
-  digitalWrite(PIN_E_DIR, (dir>0) ? HIGH : LOW);
+  digitalWrite(PIN_E_DIR, (dir<0) ? HIGH : LOW);
   while(pid_adjust>0)
   {
     pid_adjust--;
