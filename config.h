@@ -9,6 +9,8 @@
 
 #include <Arduino.h>
 
+#define INVERT_C  // flip C linear actuator direction
+#define INVERT_D  // flip D linear actuator direction
 
 // MISC
 #define PIN_LED   (13)
@@ -22,13 +24,23 @@
 #define PIN_B_STE (31)
 #define PIN_B_ENA (33)
 
-#define PIN_C_INA (4)
 #define PIN_C_PWM (3)
+#ifdef INVERT_C
+#define PIN_C_INA (2)
+#define PIN_C_INB (4)
+#else
+#define PIN_C_INA (4)
 #define PIN_C_INB (2)
+#endif
 
-#define PIN_D_INA (10)
 #define PIN_D_PWM (9)
+#ifdef INVERT_D
+#define PIN_D_INA (8)
+#define PIN_D_INB (10)
+#else
+#define PIN_D_INA (10)
 #define PIN_D_INB (8)
+#endif
 
 #define PIN_E_DIR (35)
 #define PIN_E_STE (37)
@@ -124,16 +136,16 @@
 // PHYSICAL LIMITS & SOFTWARE LIMITS
 //------------------------------------------------------------------------------
 // The physical limits are used to calibrate the machine.
-/*
+
 #define ANGLE_B_MAX (360-72.90)
 #define ANGLE_B_MIN (72.9)
 #define ANGLE_C_MAX (160.31)
 #define ANGLE_C_MIN (50.57)
 #define ANGLE_D_MAX (173.6)
 #define ANGLE_D_MIN (87.85)
-#define ANGLE_E_MAX (-165)
-#define ANGLE_E_MIN (+165)
-*/
+#define ANGLE_E_MAX (180+165)
+#define ANGLE_E_MIN (180-165)
+/*
 // The software limits may (and probably should) be less than the physical limits.
 #define ANGLE_A_MAX (270)
 #define ANGLE_A_MIN (90)
@@ -145,7 +157,7 @@
 #define ANGLE_D_MIN (87.85)
 #define ANGLE_E_MAX (180+165)
 #define ANGLE_E_MIN (180-165)
-
+*/
 
 
 //------------------------------------------------------------------------------
