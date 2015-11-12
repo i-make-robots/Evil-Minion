@@ -39,6 +39,14 @@ void setup_sensors() {
 }
 
 
+void sensor_firstTime() {
+  int i;
+  for(i=0;i<NUM_AXIES;++i) {
+    sensors_adjust[i] = 0;
+  }
+}
+
+
 // from http://www.madscientisthut.com/forum_php/viewtopic.php?f=11&t=7
 uint32_t sensor_update(int csel,int sdout) {
   uint32_t data = 0, inputStream;
@@ -149,11 +157,12 @@ void test_one_sensor(int sensor_number,int csel_pin,int sdout_pin) {
     //Serial.print("ERR");
     //Serial.print(err,HEX);
   } else {
+    //Serial.println(sensor_angle(d));
     float angle = sensor_angle(d) + sensors_adjust[sensor_number];
     if(angle<0) angle+=360;
     else if(angle>=360) angle-=360;
     sensors_raw[sensor_number] = angle;
-//    Serial.print(sensors_raw[sensor_number]);
+    //Serial.print(sensors_raw[sensor_number]);
   }
 }
 

@@ -8,9 +8,9 @@
 //--------------------------------------------------------
 
 
-void loadConfig();
-void configSaveAdjustments();
-void saveUID();
+extern void loadConfig();
+extern void configSaveAdjustments();
+extern void saveUID();
 
 
 

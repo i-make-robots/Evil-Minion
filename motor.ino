@@ -10,7 +10,7 @@
 
 
 
-char *motor_letters = "ABCDE";
+const char *motor_letters = "ABCDE";
 PIDobject pid[NUM_AXIES];
 
 // @TEST Servo stuff

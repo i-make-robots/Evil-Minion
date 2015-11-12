@@ -18,6 +18,7 @@ extern float sensors_filtered[NUM_AXIES];
 
 void tick_sensors();
 uint32_t sensor_update(int csel,int sdout);
+void sensor_firstTime();
 
 float sensor_angle(uint32_t data);
 int sensor_error(uint32_t data,int beVerbose);

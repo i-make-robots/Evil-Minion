@@ -62,7 +62,11 @@ void loadConfig() {
 
     // upgrade path from one version to the next, if needed.
     if(version_number==0) {
-      // Update robot uuid
+      // Update sensor values 
+      sensor_firstTime();
+      saveAdjustments();
+      
+      // Update robot uid  
       robot_uid=0;
       saveUID();
     } else {
@@ -98,6 +102,8 @@ void saveAdjustments() {
  * Save the robot's unique ID
  */
 void saveUID() {
+  Serial.print(F("New UID="));
+  Serial.println(robot_uid);
   EEPROM_writeLong(ADDR_GUID,robot_uid);
 }
 

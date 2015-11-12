@@ -7,6 +7,7 @@
 #include "config.h"
 #include "pid.h"
 #include "sensor.h"
+#include "flash.h"
 #include "motor.h"
 
 

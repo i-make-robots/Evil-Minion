@@ -12,7 +12,7 @@
 #include "config.h"
 
 
-extern char *motor_letters;
+extern const char *motor_letters;
 extern PIDobject pid[NUM_AXIES];
 
 extern int servo_angle;

@@ -69,7 +69,7 @@ float has_code(char code) {
  */
 void help() {
   Serial.print(F("\n\nHELLO WORLD! I AM MINION #"));
-  Serial.println(robot_uid);
+  Serial.println(robot_uid,DEC);
   Serial.println(F("== http://www.marginallyclever.com/ =="));
   Serial.println(F("I understand the following commands:"));
   Serial.println(F("Nx *y (this is line number x, with checksum y)\n"\
@@ -267,7 +267,7 @@ void process_command() {
     
     line_number++;
   }
-  
+
   if(!strncmp(buffer,"UID",3) && robot_uid==0) {
     robot_uid=atoi(strchr(buffer,' ')+1);
     saveUID();
